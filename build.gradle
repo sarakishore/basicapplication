@@ -6,7 +6,7 @@
     id 'org.cyclonedx.bom' version '1.8.2'
 }
 
-group = 'gradleSample'
+group = 'com.logicfocus'
 version = project.hasProperty('version') ? version : '1.0'
 sourceCompatibility = '1.8'
 

@@ -16,6 +16,17 @@ targetCompatibility = 1.8
 repositories {
   mavenCentral()
 }
+cyclonedxBom {
+ includeConfigs = ["runtimeClasspath"]
+ projectType = "application"
+ schemaVersion = "1.5"
+ destination = file("build/reports")
+ outputName = "bom"
+ outputFormat = "xml"
+ includeBomSerialNumber = false
+ includeLicenseText = false
+ componentVersion = "2.0.0"
+}
 
 dependencies {
   implementation 'com.google.guava:guava:29.0-jre'

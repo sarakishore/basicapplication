@@ -1,4 +1,4 @@
-plugins {
+ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.7'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
@@ -6,48 +6,40 @@ plugins {
     id 'org.cyclonedx.bom' version '1.8.2'
 }
 
-apply plugin: 'java'
-apply plugin: 'maven-publish'
-
-group = 'com.logicfocus'
-version = '2.0'
-
-sourceCompatibility = 1.8 // java 8
-targetCompatibility = 1.8
+group = 'gradleSample'
+version = project.hasProperty('version') ? version : '1.0'
+sourceCompatibility = '1.8'
 
 repositories {
-  mavenCentral()
-}
-cyclonedxBom {
- includeConfigs = ["runtimeClasspath"]
- projectType = "application"
- schemaVersion = "1.5"
- destination = file("build/reports")
- outputName = "bom"
- outputFormat = "xml"
- includeBomSerialNumber = false
- includeLicenseText = false
- componentVersion = "2.0.0"
+    mavenCentral()
 }
 
 dependencies {
-  implementation 'com.google.guava:guava:29.0-jre'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+cyclonedxBom{
+    includeConfigs = ["runtimeClasspath"]
+    projectType = "application"
+    schemaVersion = "1.5"
+    destination = file("build/reports")
+    outputName = "bom"
+    outputFormat = "xml"
+    includeBomSerialNumber = false
+    includeLicenseText = false
+    componentVersion = "2.0.0"
 }
 
-java {
-	withSourcesJar()
-	withJavadocJar()
+tasks.named('test') {
+    useJUnitPlatform()
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-		from components.java
-        }
+task buildJar(type: Jar) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from 'build/libs'
     }
 }
 
-wrapper {
-    gradleVersion = "7.3.3"
-    distributionType = Wrapper.DistributionType.ALL
-}
+buildJar.dependsOn jar, bootJar
